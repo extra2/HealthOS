@@ -1,0 +1,88 @@
+﻿@model RegisterViewModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+@* rejestracja *@
+<div class="container" align="center">
+    <div id="signupbox" style="margin-top:50px; max-width: 400px;" class="">
+        <div class="panel panel-info" align="left">
+            <div class="panel-heading">
+                <div class="panel-title">Rejestracja</div>
+                <a asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" style="float:right; font-size: 100%; position: relative; top:-20px">Zaloguj się</a>
+            </div>
+            <div class="panel-body">
+                <form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
+                    <h4 align="center" class="text-createaccount">Zarejestruj się!</h4>
+                    <hr />
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Name"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Surname"></label>
+                        <input asp-for="Surname" class="form-control" />
+                        <span asp-validation-for="Surname" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Gender"></label>
+                        <select asp-for="Gender" class="dropdown-toggle form-control" style="height: 100%">
+                            <option value="Mężczyzna">Mężczyzna</option>
+                            <option value="Kobieta">Kobieta</option>
+                        </select>
+                        <span asp-validation-for="Gender" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Birthday"></label>
+                        <input asp-for="Birthday" class="form-control" />
+                        <span asp-validation-for="Birthday" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="BloodType"></label>
+                        <select asp-for="BloodType" class="dropdown-toggle form-control" style="height: 100%">
+                            <option value="A Rh+">A Rh+</option>
+                            <option value="A Rh-">A Rh-</option>
+                            <option value="B Rh+">B Rh+</option>
+                            <option value="B Rh-">B Rh-</option>
+                            <option value="AB Rh+">AB Rh+</option>
+                            <option value="AB Rh-">AB Rh-</option>
+                            <option value="0 Rh+">0 Rh+</option>
+                            <option value="0 Rh-">0 Rh-</option>
+                        </select>
+                        <span asp-validation-for="BloodType" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Email"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Password"></label>
+                        <input asp-for="Password" class="form-control" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ConfirmPassword"></label>
+                        <input asp-for="ConfirmPassword" class="form-control" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <input asp-for="isDoctor" type="checkbox" />
+                        <label asp-for="isDoctor"></label>
+                        <span asp-validation-for="isDoctor" class="text-danger"></span>
+                    </div>
+                    <button type="submit" class="btn btn-default">Zarejestruj</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+    @section Scripts {
+        @await Html.PartialAsync("_ValidationScriptsPartial")
+    }

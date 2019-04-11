@@ -1,0 +1,171 @@
+﻿@model HealthOS.ViewModels.CustomStatisticsViewModel
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<div class="row">
+    @* bar - buttony *@
+    <div class="col-lg-12" align="center">
+        <button type="button" onclick="alert('go_back')" class="btn btn-lg btn-primary" style="margin-left: 1%; margin-right: 1%; background: #103A75; border-width: 0px">Poprzedni miesiąc</button>
+        <button type="button" onclick="alert('go_forward')" class="btn btn-lg btn-primary" style="margin-left: 1%; margin-right: 1%; background: #103A75; border-width: 0px">Następny miesiąc</button>
+        <button id="add-measurement-button" data-toggle="modal" data-target="#modalAddBloodPressureMeasurement" class="btn btn-lg btn-primary" style="margin-left: 1%; margin-right: 1%; background: #103A75; border-width: 0px">Dodaj pomiar</button>
+        <button id="add-new-measurement" data-toggle="modal" data-target="#modalAddBloodPressureMeasurement" class="btn btn-lg btn-primary" style="margin-left: 1%; margin-right: 1%; background: #103A75; border-width: 0px">Dodaj nową statystykę</button>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col col-2">
+        <div class="list-group">
+            <div class="list-group-item list-group-item-primary active" style="text-align: center">Własne Statystyki</div>
+            <button onclick="s_bp_clicked()" id="b_s_bp" class="list-group-item list-group-item-action list-group-item-info active" style="text-align: center">Statystyka 1</button>
+            <button onclick="s_gl_clicked()" id="b_s_gl" class="list-group-item list-group-item-action list-group-item-info" style="text-align: center">Statystyka 2</button>
+        </div>
+    </div>
+    <div class="col col-10" id="s_bp">
+        <div class="row">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Data pomiaru</th>
+                        <th scope="col">Pomiar 1</th>
+                        <th scope="col">Pomiar 2</th>
+                        <th scope="col">Usuń</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>10/8/2018 9:06 AM</td>
+                        <td>55</td>
+                        <td>66</td>
+                        <td>
+                            <button id="1" type="button" onclick="alert('TODO')" class="btn btn-sm btn-primary" style="margin-left: 1%; margin-right: 1%; background: #BA211B; border-width: 0px">Usuń</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>10/8/2018 10:06 AM</td>
+                        <td>75</td>
+                        <td>77</td>
+                        <td>
+                            <button id="2" type="button" onclick="alert('TODO')" class="btn btn-sm btn-primary" style="margin-left: 1%; margin-right: 1%; background: #BA211B; border-width: 0px">Usuń</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>10/8/2018 12:03 PM</td>
+                        <td>333</td>
+                        <td>444</td>
+                        <td>
+                            <button id="3" type="button" onclick="alert('TODO')" class="btn btn-sm btn-primary" style="margin-left: 1%; margin-right: 1%; background: #BA211B; border-width: 0px">Usuń</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">4</th>
+                        <td>10/12/2018 12:01 PM</td>
+                        <td>123</td>
+                        <td>325</td>
+                        <td>
+                            <button id="6" type="button" onclick="alert('TODO')" class="btn btn-sm btn-primary" style="margin-left: 1%; margin-right: 1%; background: #BA211B; border-width: 0px">Usuń</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col col-10" id="s_gl" hidden>
+        <div class="row">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Data pomiaru</th>
+                        <th scope="col">Pomiar 1</th>
+                        <th scope="col">Usuń</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>11/8/2018 19:23 AM</td>
+                        <td>25</td>
+                        <td>
+                            <button id="10" type="button" onclick="alert('TODO')" class="btn btn-sm btn-primary" style="margin-left: 1%; margin-right: 1%; background: #BA211B; border-width: 0px">Usuń</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>11/8/2018 18:06 AM</td>
+                        <td>85</td>
+                        <td>
+                            <button id="20" type="button" onclick="alert('TODO')" class="btn btn-sm btn-primary" style="margin-left: 1%; margin-right: 1%; background: #BA211B; border-width: 0px">Usuń</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>11/8/2018 15:03 PM</td>
+                        <td>53</td>
+                        <td>
+                            <button id="30" type="button" onclick="alert('TODO')" class="btn btn-sm btn-primary" style="margin-left: 1%; margin-right: 1%; background: #BA211B; border-width: 0px">Usuń</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">4</th>
+                        <td>11/12/2018 13:01 PM</td>
+                        <td>43</td>
+                        <td>
+                            <button id="50" type="button" onclick="alert('TODO')" class="btn btn-sm btn-primary" style="margin-left: 1%; margin-right: 1%; background: #BA211B; border-width: 0px">Usuń</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+    <style>
+        /* width */
+        ::-webkit-scrollbar {
+            width: 2px;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            background: #708090;
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: #000000;
+        }
+
+            /* Handle on hover */
+            ::-webkit-scrollbar-thumb:hover {
+                background: #000000;
+            }
+    </style>
+
+    <script>
+        // send post to add measurement
+        function s_bp_clicked() {
+            // show correct table
+            document.getElementById("s_bp").hidden = false;
+            document.getElementById("s_gl").hidden = true;
+            // show correct 'active' button
+            document.getElementById("b_s_bp").className = "list-group-item list-group-item-action list-group-item-info active";
+            document.getElementById("b_s_gl").className = "list-group-item list-group-item-action list-group-item-info";
+        }
+
+        function s_gl_clicked() {
+            // show correct table
+            document.getElementById("s_bp").hidden = true;
+            document.getElementById("s_gl").hidden = false;
+            // show correct 'active' button
+            document.getElementById("b_s_bp").className = "list-group-item list-group-item-action list-group-item-info";
+            document.getElementById("b_s_gl").className = "list-group-item list-group-item-action list-group-item-info active";
+        }
+    </script>

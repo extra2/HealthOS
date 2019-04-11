@@ -1,0 +1,430 @@
+﻿@model HealthOS.ViewModels.MyPatientViewModel
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+<div class="break"></div>
+<h2 align="center">@Model.ApplicationUser.Name @Model.ApplicationUser.Surname (ur. @Model.ApplicationUser.Birthday.ToString("d")), grupa krwi: @Model.ApplicationUser.BloodType</h2>
+
+<div class="break"></div>
+<div class="row">
+    <div class="col col-2">
+        <div class="list-group">
+            <div class="list-group-item list-group-item-primary active" style="text-align: center">Statystyki</div>
+            <button onclick="s_bp_clicked()" id="b_s_bp" class="list-group-item list-group-item-action list-group-item-info active" style="text-align: center">Ciśnienie krwi</button>
+            <button onclick="s_gl_clicked()" id="b_s_gl" class="list-group-item list-group-item-action list-group-item-info" style="text-align: center">Stężenie glukozy</button>
+            <button onclick="s_he_clicked()" id="b_s_he" class="list-group-item list-group-item-action list-group-item-info" style="text-align: center">Wzrost</button>
+            <button onclick="s_we_clicked()" id="b_s_we" class="list-group-item list-group-item-action list-group-item-info" style="text-align: center">Masa ciała</button>
+            <div class="list-group-item list-group-item-primary active" style="text-align: center">Przebyte choroby</div>
+            <button onclick="diseas_clicked()" id="b_diseas" class="list-group-item list-group-item-action list-group-item-info" style="text-align: center">Choroby</button>
+            <button onclick="allergy_clicked()" id="b_allergy" class="list-group-item list-group-item-action list-group-item-info" style="text-align: center">Alergie</button>
+            <div class="list-group-item list-group-item-primary active" style="text-align: center">Leki</div>
+            <button onclick="drugs_clicked()" id="b_drugs" class="list-group-item list-group-item-action list-group-item-info" style="text-align: center">Zażywane leki</button>
+        </div>
+    </div>
+    @*Ciśnieni krwi*@
+    <div class="col col-10" id="s_bp">
+        <div class="row">
+            <table class="table table-striped table-bordered table-sm">
+                <thead>
+                    <tr>
+                        <th>
+                            Imię
+                        </th>
+                        <th>
+                            Ciśnienie skurczowe
+                        </th>
+                        <th>
+                            Ciśnienie rozkurczowe
+                        </th>
+                        <th>
+                            Data pomiaru
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var bpstat in @Model.ApplicationUser.BloodPressureStatistics)
+                    {
+                        <tr>
+
+                            <td>@Model.ApplicationUser.Name @Model.ApplicationUser.Surname</td>
+                            <td>@bpstat.Systolic</td>
+                            <td>@bpstat.Diastolic</td>
+                            <td>@bpstat.MeasurementDate.ToString("g")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    @*Stężenie glukozy*@
+    <div class="col col-10" id="s_gl" hidden>
+        <div class="row">
+            <table class="table table-striped table-bordered table-sm ">
+                <thead>
+                    <tr>
+                        <th>
+                            Imię
+                        </th>
+                        <th>
+                            Stężenie glukozy we krwi
+                        </th>
+                        <th>
+                            Data pomiaru
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var gsstat in @Model.ApplicationUser.GlucoseStatistics)
+                    {
+                        <tr>
+
+                            <td>@Model.ApplicationUser.Name @Model.ApplicationUser.Surname</td>
+                            <td>@gsstat.Glucose</td>
+                            <td>@gsstat.MeasurementDate.ToString("g")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    @*Masa ciała*@
+    <div class="col col-10" id="s_we" hidden>
+        <div class="row">
+            <table class="table table-striped table-bordered table-sm">
+                <thead>
+                    <tr>
+                        <th>
+                            Imię
+                        </th>
+                        <th>
+                            Masa ciała
+                        </th>
+                        <th>
+                            Data pomiaru
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var bpstat in @Model.ApplicationUser.WeightStatistics)
+                    {
+                        <tr>
+
+                            <td>@Model.ApplicationUser.Name @Model.ApplicationUser.Surname</td>
+                            <td>@bpstat.Weight</td>
+                            <td>@bpstat.MeasurementDate.ToString("g")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    @*Wzrost*@
+    <div class="col col-10" id="s_he" hidden>
+        <div class="row">
+            <table class="table table-striped table-bordered table-sm">
+                <thead>
+                    <tr>
+                        <th>
+                            Imię
+                        </th>
+                        <th>
+                            Wzrost
+                        </th>
+                        <th>
+                            Data pomiaru
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var gsstat in @Model.ApplicationUser.HeightStatistics)
+                    {
+                        <tr>
+                            <td>@Model.ApplicationUser.Name @Model.ApplicationUser.Surname</td>
+                            <td>@gsstat.Height</td>
+                            <td>@gsstat.MeasurementDate.ToString("g")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    @*Choroby*@
+    <div class="col col-10" id="diseas" hidden>
+        <div class="row">
+            <table class="table table-striped table-bordered table-sm">
+                <thead>
+                    <tr>
+                        <th>
+                        Choroba
+                    </th>
+                    <th>
+                        Przebieg choroby
+                    </th>
+                    <th>
+                        Data przebycia choroby
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var diseas in @Model.ApplicationUser.Diseases)
+                {
+                    var duration = "teraz";
+                    if (diseas.EndDate != null)
+                    {
+                        duration = ((DateTime)diseas.EndDate).ToString("d");
+                    }
+                    <tr>
+                        <td>@diseas.Name</td>
+                        <td>@diseas.Description</td>
+                        <td>@diseas.StartDate.ToString("d") - @duration</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+@*Alergie*@
+<div class="col col-10" id="allergy" hidden>
+    <div class="row">
+        <table class="table table-striped table-bordered table-sm">
+            <thead>
+                <tr>
+                    <th>
+                    Nazwa alergii
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var allergy in @Model.ApplicationUser.Allergies)
+            {
+                <tr>
+                    <td>@allergy.Value</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+</div>
+@*Zażywane leki*@
+<div class="col col-10" id="drugs" hidden>
+    <div class="row">
+        <table class="table table-striped table-bordered table-sm">
+            <thead>
+                <tr>
+                    <th>
+                        Nazwa leku
+                    </th>
+                    <th>
+                        Dawkowanie
+                    </th>
+                    <th>
+                        Opis
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var drug in @Model.ApplicationUser.Drugs)
+                {
+                    <tr>
+                        <td>@drug.Name</td>
+                        <td>
+                            <p>Ilość: @drug.Amount</p>
+                            <p>
+                                Dni przyjmowania:
+                                @if (drug.Day1)
+                                {@Html.Raw("poniedziałek, ")
+                            }
+                                @if (drug.Day2)
+                                {@Html.Raw("wtorek, ")
+                            }
+                                @if (drug.Day3)
+                                {@Html.Raw("środa, ")
+                            }
+                                @if (drug.Day4)
+                                {@Html.Raw("czwartek, ")
+                            }
+                                @if (drug.Day5)
+                                {@Html.Raw("piątek, ")
+                            }
+                                @if (drug.Day6)
+                                {@Html.Raw("sobota, ")
+                            }
+                                @if (drug.Day7)
+                                {@Html.Raw("niedziela")
+                            }
+                            </p>
+                        </td>
+                        <td>@drug.ConsumptionMethod</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+
+
+
+
+<style>
+    /* width */
+    ::-webkit-scrollbar {
+        width: 2px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: #708090;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #000000;
+    }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: #000000;
+        }
+</style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    //initial
+    function s_bp_clicked() {
+        // show correct table
+        document.getElementById("s_bp").hidden = false;
+        document.getElementById("s_gl").hidden = true;
+        document.getElementById("s_we").hidden = true;
+        document.getElementById("s_he").hidden = true;
+        document.getElementById("diseas").hidden = true;
+        document.getElementById("allergy").hidden = true;
+        document.getElementById("drugs").hidden = true;
+        // show correct 'active' button
+        document.getElementById("b_s_bp").className = "list-group-item list-group-item-action list-group-item-info active";
+        document.getElementById("b_s_gl").className = "list-group-item list-group-item-action list-group-item-info";
+        document.getElementById("b_s_we").className = "list-group-item list-group-item-action list-group-item-info";
+        document.getElementById("b_s_he").className = "list-group-item list-group-item-action list-group-item-info";
+        document.getElementById("b_diseas").className = "list-group-item list-group-item-action list-group-item-info";
+        document.getElementById("b_allergy").className = "list-group-item list-group-item-action list-group-item-info";
+        document.getElementById("b_drugs").className = "list-group-item list-group-item-action list-group-item-info";
+    }
+
+    function s_gl_clicked() {
+        // show correct table
+        document.getElementById("s_bp").hidden = true;
+        document.getElementById("s_gl").hidden = false;
+        document.getElementById("s_we").hidden = true;
+        document.getElementById("s_he").hidden = true;
+        document.getElementById("diseas").hidden = true;
+        document.getElementById("allergy").hidden = true;
+        document.getElementById("drugs").hidden = true;
+        // show correct 'active' button
+        document.getElementById("b_s_bp").className = "list-group-item list-group-item-action list-group-item-info";
+        document.getElementById("b_s_gl").className = "list-group-item list-group-item-action list-group-item-info active";
+        document.getElementById("b_s_we").className = "list-group-item list-group-item-action list-group-item-info";
+        document.getElementById("b_s_he").className = "list-group-item list-group-item-action list-group-item-info";
+        document.getElementById("b_diseas").className = "list-group-item list-group-item-action list-group-item-info";
+        document.getElementById("b_allergy").className = "list-group-item list-group-item-action list-group-item-info";
+        document.getElementById("b_drugs").className = "list-group-item list-group-item-action list-group-item-info";
+    }
+
+    function s_we_clicked() {
+        // show correct table
+        document.getElementById("s_bp").hidden = true;
+        document.getElementById("s_gl").hidden = true;
+        document.getElementById("s_we").hidden = false;
+        document.getElementById("s_he").hidden = true;
+        document.getElementById("diseas").hidden = true;
+        document.getElementById("allergy").hidden = true;
+        document.getElementById("drugs").hidden = true;
+        // show correct 'active' button
+        document.getElementById("b_s_bp").className = "list-group-item list-group-item-action list-group-item-info";
+        document.getElementById("b_s_gl").className = "list-group-item list-group-item-action list-group-item-info";
+        document.getElementById("b_s_we").className = "list-group-item list-group-item-action list-group-item-info active";
+        document.getElementById("b_s_he").className = "list-group-item list-group-item-action list-group-item-info";
+        document.getElementById("b_diseas").className = "list-group-item list-group-item-action list-group-item-info";
+        document.getElementById("b_allergy").className = "list-group-item list-group-item-action list-group-item-info";
+        document.getElementById("b_drugs").className = "list-group-item list-group-item-action list-group-item-info";
+    }
+
+    function s_he_clicked() {
+        // show correct table
+        document.getElementById("s_bp").hidden = true;
+        document.getElementById("s_gl").hidden = true;
+        document.getElementById("s_we").hidden = true;
+        document.getElementById("s_he").hidden = false;
+        document.getElementById("diseas").hidden = true;
+        document.getElementById("allergy").hidden = true;
+        document.getElementById("drugs").hidden = true;
+        // show correct 'active' button
+        document.getElementById("b_s_bp").className = "list-group-item list-group-item-action list-group-item-info";
+        document.getElementById("b_s_gl").className = "list-group-item list-group-item-action list-group-item-info";
+        document.getElementById("b_s_we").className = "list-group-item list-group-item-action list-group-item-info";
+        document.getElementById("b_s_he").className = "list-group-item list-group-item-action list-group-item-info active";
+        document.getElementById("b_diseas").className = "list-group-item list-group-item-action list-group-item-info";
+        document.getElementById("b_allergy").className = "list-group-item list-group-item-action list-group-item-info";
+        document.getElementById("b_drugs").className = "list-group-item list-group-item-action list-group-item-info";
+    }
+
+    function diseas_clicked() {
+        // show correct table
+        document.getElementById("s_bp").hidden = true;
+        document.getElementById("s_gl").hidden = true;
+        document.getElementById("s_we").hidden = true;
+        document.getElementById("s_he").hidden = true;
+        document.getElementById("diseas").hidden = false;
+        document.getElementById("allergy").hidden = true;
+        document.getElementById("drugs").hidden = true;
+        // show correct 'active' button
+        document.getElementById("b_s_bp").className = "list-group-item list-group-item-action list-group-item-info";
+        document.getElementById("b_s_gl").className = "list-group-item list-group-item-action list-group-item-info";
+        document.getElementById("b_s_we").className = "list-group-item list-group-item-action list-group-item-info";
+        document.getElementById("b_s_he").className = "list-group-item list-group-item-action list-group-item-info";
+        document.getElementById("b_diseas").className = "list-group-item list-group-item-action list-group-item-info active";
+        document.getElementById("b_allergy").className = "list-group-item list-group-item-action list-group-item-info";
+        document.getElementById("b_drugs").className = "list-group-item list-group-item-action list-group-item-info";
+    }
+
+    function allergy_clicked() {
+        // show correct table
+        document.getElementById("s_bp").hidden = true;
+        document.getElementById("s_gl").hidden = true;
+        document.getElementById("s_we").hidden = true;
+        document.getElementById("s_he").hidden = true;
+        document.getElementById("diseas").hidden = true;
+        document.getElementById("allergy").hidden = false;
+        document.getElementById("drugs").hidden = true;
+        // show correct 'active' button
+        document.getElementById("b_s_bp").className = "list-group-item list-group-item-action list-group-item-info";
+        document.getElementById("b_s_gl").className = "list-group-item list-group-item-action list-group-item-info";
+        document.getElementById("b_s_we").className = "list-group-item list-group-item-action list-group-item-info";
+        document.getElementById("b_s_he").className = "list-group-item list-group-item-action list-group-item-info";
+        document.getElementById("b_diseas").className = "list-group-item list-group-item-action list-group-item-info";
+        document.getElementById("b_allergy").className = "list-group-item list-group-item-action list-group-item-info active";
+        document.getElementById("b_drugs").className = "list-group-item list-group-item-action list-group-item-info";
+    }
+
+    function drugs_clicked() {
+        // show correct table
+        document.getElementById("s_bp").hidden = true;
+        document.getElementById("s_gl").hidden = true;
+        document.getElementById("s_we").hidden = true;
+        document.getElementById("s_he").hidden = true;
+        document.getElementById("diseas").hidden = true;
+        document.getElementById("allergy").hidden = true;
+        document.getElementById("drugs").hidden = false;
+        // show correct 'active' button
+        document.getElementById("b_s_bp").className = "list-group-item list-group-item-action list-group-item-info";
+        document.getElementById("b_s_gl").className = "list-group-item list-group-item-action list-group-item-info";
+        document.getElementById("b_s_we").className = "list-group-item list-group-item-action list-group-item-info";
+        document.getElementById("b_s_he").className = "list-group-item list-group-item-action list-group-item-info";
+        document.getElementById("b_diseas").className = "list-group-item list-group-item-action list-group-item-info";
+        document.getElementById("b_allergy").className = "list-group-item list-group-item-action list-group-item-info";
+        document.getElementById("b_drugs").className = "list-group-item list-group-item-action list-group-item-info active";
+    }
+</script>

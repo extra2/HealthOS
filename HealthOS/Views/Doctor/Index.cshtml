@@ -1,0 +1,69 @@
+﻿@model HealthOS.ViewModels.Patient.DoctorViewModel
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<div class="box">
+    @await Html.PartialAsync("_UserHeader")
+    <div class="title">Witaj @Model.AppUser.Name @Model.AppUser.Surname!</div>
+</div>
+
+<div class="break"></div>
+
+<div class="row">
+    <div class="column">
+        <div class="panel panel-primary" style="border-radius: 10px">
+            <div class="panel-heading" align="center" style="background: #103A75; border-radius: 10px"><b>Moi pacjenci</b></div>
+            <div class="panel-body" style="height: 100%">
+                <div class="row">
+                    <div class="col col-12">
+                        <button type="button" onclick="location.href = '@Url.Action("MyPatients", "Doctor")'" class="btn btn-lg btn-primary" style="width: 98%; margin-left: 1%; margin-right: 1%; background: #90BAF4; border-width: 0px">
+                            <b>Moi pacjenci</b>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="column">
+        <div class="panel panel-primary" style="border-radius: 10px">
+            <div class="panel-heading" align="center" style="background: #103A75; border-radius: 10px"><b>Wiadomości</b></div>
+            <div class="panel-body">
+                <div class="col col-12">
+                    <button type="button" onclick="location.href = '@Url.Action("ChatList", "Doctor")'" class="btn btn-lg btn-warning" style="width: 98%; margin-left: 1%; margin-right: 1%; background: #90BAF4; border-width: 0px">
+                        <b>Wiadomości</b>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="column">
+        <div class="panel panel-primary" style="border-radius: 10px">
+            <div class="panel-heading" align="center" style="background: #103A75; border-radius: 10px"><b>Twój indywidualny identyfikator lekarza</b></div>
+            <div class="panel-body" style="height: 100%">
+                <div class="row">
+                    <div class="col col-12">
+                        <h2 align="center">@Model.AppUser.InvitationCode</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="column">
+        <div class="panel panel-primary" style="border-radius: 10px">
+            <div class="panel-heading" align="center" style="background: #103A75; border-radius: 10px"><b>Dane osobowe</b></div>
+            <div class="panel-body">
+                <div class="col col-12">
+                    <button type="button" onclick="location.href = '@Url.Action("PersonalData", "Doctor")'" class="btn btn-lg btn-warning" style="width: 98%; margin-left: 1%; margin-right: 1%; background: #90BAF4; border-width: 0px">
+                        <b>Zarządaj danymi osobowymi</b>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

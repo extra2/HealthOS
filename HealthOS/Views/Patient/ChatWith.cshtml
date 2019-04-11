@@ -1,0 +1,113 @@
+﻿@model HealthOS.ViewModels.ChatWithUserViewModel
+
+@{
+    ViewBag.Title = "Skrzynka odbiorcza";
+    Layout = "_Layout";
+}
+<div class="row">
+    <div class="col col-12" align="center">
+        <a asp-area="" asp-controller="Patient" asp-action="ChatList">
+            <button class="btn btn-lg btn-primary" style="margin-left: 1%; margin-right: 1%; background: #103A75; border-width: 0px; max-width: 200px">
+                Powrót
+            </button>
+        </a>
+        <button data-toggle="modal" data-target="#modalSentMessage" class="btn btn-lg btn-primary" style="margin-left: 1%; margin-right: 1%; background: #103A75; border-width: 0px">Napisz nową</button>
+
+    </div>
+</div>
+
+<div class="break"></div>
+
+@{ var counter = 0;}
+@foreach (var message in @Model.ChatMessages)
+{
+    <div class="panel-group">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h4 class="row panel-title">
+                    <div class="col col-6">
+                        <a data-toggle="collapse" href="#collapse-@counter">
+                            <button class="btn btn-sm btn-warning" style="margin-left: 1%; margin-right: 1%; border-width: 0px; max-width: 200px">Rozwiń</button>
+                        </a>
+                        @message.Title
+                    </div>
+                    <div class="col col-6" align="right">
+                        Nadawca: @message.UserFrom.Name @message.UserFrom.Surname, data wysłania: @message.SentDate.ToString("G")
+                        <button class="btn btn-sm btn-danger" onclick="deleteMessage(@message.Id);" style="margin-left: 1%; margin-right: 1%; border-width: 0px; max-width: 200px">Usuń</button>
+                           @*button usuń*@
+                    </div>
+                </h4>
+
+            </div>
+            <div id="collapse-@counter" class="panel-collapse collapse">
+                <div class="panel-body" style="font-size: 20px;">@message.Body</div>
+            </div>
+        </div>
+    </div>
+    { counter++; }
+}
+
+@*modal box send message start*@
+<div class="modal" id="modalSentMessage" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"><b>Wyślij nową wiadomość</b></h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="input-title">Tytuł:</label>
+                        <input id="input-title" type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="input-body">Wiadomość:</label>
+                        <input id="input-body" type="text" class="form-control" style="min-height: 100%; word-wrap: break-word;">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
+                <button id="send-message-button-clicked" type="submit" data-dismiss="modal" class="btn btn-primary">Wyślij wiadomość</button>
+            </div>
+        </div>
+    </div>
+</div>
+@* Modal box send message ends *@
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script>
+    // send message
+    $(document).ready(function () {
+        $("#send-message-button-clicked").click(function () {
+            $.ajax({
+                url: '/api/Chat',
+                type: 'POST',
+                dataType: "application/json",
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    UserFrom: '@Model.CurreentUser.Id',
+                    UserTo: '@Model.ConversationUser.Id',
+                    Title: document.getElementById("input-title").value,
+                    Body: document.getElementById("input-body").value
+                }),
+                complete: function () {
+                    location.reload();
+                }
+            });
+        });
+    });
+
+
+    function deleteMessage(id) {
+        $.ajax({
+            url: '/api/Chat/' + id,
+            type: 'DELETE',
+            complete: function () {
+                location.reload();
+            }
+        });
+    }
+</script>

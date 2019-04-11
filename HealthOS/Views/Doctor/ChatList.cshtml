@@ -1,0 +1,214 @@
+﻿@model HealthOS.ViewModels.ChatMainInboxViewModel
+
+@{
+    ViewBag.Title = "Wiadomości";
+    Layout = "_Layout";
+}
+
+<div class="row">
+    <div class="col col-12" align="center">
+        <button id="sent-message-button" data-toggle="modal" data-target="#modalSentMessage" class="btn btn-lg btn-primary" style="margin-left: 1%; margin-right: 1%; background: #103A75; border-width: 0px; max-width: 200px">Nowa wiadomość</button>
+    </div>
+</div>
+
+<div class="break"></div>
+
+
+<div class="col col-12" id="s_bp">
+    <div class="row">
+        <table class="table table-striped table-bordered table-sm">
+            <thead>
+            <tr>
+                <th  style="text-align: center">
+                    Osoba wysyłająca
+                </th>
+                <th  style="text-align: center">
+                    Tytuł wiadomości
+                </th>
+                <th  style="text-align: center">
+                    Data
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var message in @Model.ChatMainInbox)
+            {   
+            <td style="text-align: center">
+                <a asp-controller="Doctor" asp-action="ChatWith" asp-route-id="@message.UserId">
+                    @if (!message.Seen)
+                    {@Html.Raw("<b>")
+                }
+                    @message.UserName
+                    @if (!message.Seen)
+                    {@Html.Raw("</b>")
+                }
+                </a>
+            </td>
+            <td style="text-align: center">
+                <a asp-controller="Doctor" asp-action="ChatWith" asp-route-id="@message.UserId">
+                    @if (!message.Seen)
+                    {@Html.Raw("<b>")
+                    }
+                    @message.Title
+                    @if (!message.Seen)
+                    {@Html.Raw("</b>")
+                    }
+                </a>
+            </td>
+            <td style="text-align: center">
+                <a asp-controller="Doctor" asp-action="ChatWith" asp-route-id="@message.UserId">
+                    @if (!message.Seen)
+                    {@Html.Raw("<b>")
+                }
+                    @message.SentDate.ToString("G")
+                    @if (!message.Seen)
+                    {@Html.Raw("</b>")
+                }
+                </a>
+            </td>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@*modal box send message start*@
+<div class="modal" id="modalSentMessage" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"><b>Wyślij nową wiadomość</b></h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="input-messageToId">Odbiorca:</label>
+                        <select id="input-messageToId" class="dropdown-toggle form-control" style="height: 100%">
+                            @foreach (var user in Model.Users)
+                            {
+                                <option value="@user.MessageReceiverId">@user.MessageReveiverName</option>
+                            }
+
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="input-title">Tytuł:</label>
+                        <input id="input-title" type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="input-body">Wiadomość:</label>
+                        <input id="input-body" type="text" class="form-control" style="min-height: 100%; word-wrap: break-word;">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
+                <button id="send-message-button-clicked" type="submit" data-dismiss="modal" class="btn btn-primary">Wyślij wiadomość</button>
+            </div>
+        </div>
+    </div>
+</div>
+@* Modal box send message ends *@
+
+<style>
+    .message-name {
+        background: #103A75;
+        color: #ffffff;
+        height: 60px;
+        font-size: 20px;
+        text-align: center;
+        vertical-align: middle;
+        line-height: 60px;
+        overflow: scroll;
+        scrollbar-arrow-color: #103a75;
+        word-wrap: break-word;
+        overflow-x: hidden;
+        width: 100%;
+    }
+
+    .message-title {
+        background: #1D6CC1;
+        color: #ffffff;
+        height: 60px;
+        font-size: 15px;
+        text-align: center;
+        vertical-align: middle;
+        overflow: scroll;
+        line-height: 60px;
+        scrollbar-arrow-color: #103a75;
+        word-wrap: break-word;
+        overflow-x: hidden;
+        width: 100%;
+    }
+
+    .message-description {
+        background: #90BAF4;
+        color: #ffffff;
+        height: 60px;
+        font-size: 15px;
+        overflow: scroll;
+        vertical-align: middle;
+        overflow: scroll;
+        line-height: 60px;
+        scrollbar-arrow-color: #103a75;
+        word-wrap: break-word;
+        overflow-x: hidden;
+        width: 100%;
+    }
+
+    .message-topbar {
+        background: #103A75;
+        color: #ffffff;
+        height: 30px;
+        font-size: 20px;
+        text-align: center;
+        vertical-align: middle;
+        line-height: 30px;
+        width: 100%;
+    }
+    /* width */
+    ::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: #00bfff;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #1d6cc1;
+    }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: #1d6cc1;
+        }
+</style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script>
+    // send message
+    $(document).ready(function () {
+        $("#send-message-button-clicked").click(function () {
+            $.ajax({
+                url: '/api/Chat',
+                type: 'POST',
+                dataType: "application/json",
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    UserFrom: '@Model.ApplicationUser.Id',
+                    UserTo: document.getElementById("input-messageToId").value,
+                    Title: document.getElementById("input-title").value,
+                    Body: document.getElementById("input-body").value
+                }),
+                complete: function () {
+                    location.reload();
+                }
+            });
+        });
+    });
+</script>

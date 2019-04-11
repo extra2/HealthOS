@@ -1,0 +1,112 @@
+﻿.box {
+    width: 100%;
+    height: 150px;
+    border-radius: 5px;
+    box-shadow: 0 2px 30px rgba(black, .2);
+    background: lighten(#e7ff87, 10%);
+    position: relative;
+    overflow: hidden;
+    transform: translate3d(0, 0, 0);
+}
+
+.wave {
+    opacity: .4;
+    position: absolute;
+    top: 0%;
+    left: 50%;
+    right: 50%;
+    background: #0af;
+    width: 400px;
+    height: 100px;
+    margin-left: -15%;
+    margin-top: -10%;
+    transform-origin: 90% 90%;
+    border-radius: 100%;
+    animation: drift 1500ms infinite linear;
+}
+
+    .wave.-two {
+        animation: drift 2000ms infinite linear;
+        background: red;
+    }
+
+    .wave.-three {
+        animation: drift 2500ms infinite linear;
+        background: tan;
+    }
+
+    .wave.-four {
+        animation: drift 3000ms infinite linear;
+        background: green;
+    }
+
+    .wave.-five {
+        animation: drift 3500ms infinite linear;
+        background: orange;
+    }
+
+    .wave.-six {
+        animation: drift 4000ms infinite linear;
+        opacity: .1;
+        background: yellow;
+    }
+
+    .wave.-seven {
+        animation: drift 4500ms infinite linear;
+        background: chocolate;
+    }
+
+    .wave.-eight {
+        animation: drift 5000ms infinite linear;
+        background: brown;
+    }
+
+    .wave.-nine {
+        animation: drift 5500ms infinite linear;
+        background: gray;
+    }
+
+    .wave.-ten {
+        animation: drift 6000ms infinite linear;
+        background: aquamarine;
+    }
+
+.box:after {
+    content: '';
+    display: block;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(#e8a, 1), rgba(#def, 0) 80%, rgba(white, .5));
+    z-index: 11;
+    transform: translate3d(0, 0, 0);
+}
+
+.title {
+    position: absolute;
+    left: 0;
+    top: 30%;
+    width: 100%;
+    z-index: 1;
+    /*line-height: 100px;*/ /*wysokosc tekstu w dol*/
+    text-align: center;
+    transform: translate3d(0, 0, 0);
+    color: black;
+    text-transform: uppercase;
+    font-family: 'Playfair Display', serif;
+    letter-spacing: .4em;
+    font-size: 24px;
+    text-shadow: 0 1px 0 rgba(black, .1);
+    text-indent: .3em;
+}
+
+@keyframes drift {
+    from {
+        transform: rotate(180deg);
+    }
+
+    from {
+        transform: rotate(360deg);
+    }
+}

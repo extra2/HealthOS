@@ -1,0 +1,325 @@
+﻿@model HealthOS.ViewModels.DrugsViewModel
+
+@{
+    ViewBag.Title = "Lista leków";
+    Layout = "_Layout";
+}
+<div class="row">
+    <div class="col col-12" align="center">
+        <button id="add-drug-button" data-toggle="modal" data-target="#modalAddDrug" class="btn btn-lg btn-primary" style="margin-left: 1%; margin-right: 1%; background: #103A75; border-width: 0px; max-width: 200px">Dodaj zażywany lek</button>
+    </div>
+</div>
+
+<div class="break"></div>
+<div class="row col col-12 drugs-title" align="center">
+    @if (@Model.DrugsReminder.Any())
+    {
+        @Html.Raw("Pamiętaj aby zażyć dzisiaj: ")
+        foreach (var drug in @Model.DrugsReminder)
+        {
+            @Html.Raw(drug + ", ")
+        }
+    }
+</div>
+<div class="break"></div>
+
+<div class="row">
+    <div class="row drugs-title">
+        <div class="col col-10">
+            <div class="row">
+                <div class="col col-2">
+                    Nazwa leku
+                </div>
+                <div class="col col-5">
+                    Dawkowanie
+                </div>
+                <div class="col col-5">
+                    Opis
+                </div>
+            </div>
+        </div>
+        <div class="col col-2">
+            Opcje
+        </div>
+    </div>
+    @foreach (var drug in @Model.Drugs)
+    {
+        <div class="col-12 drug-break"></div>
+        <div class="col col-10">
+            @*dawkowanie-opis*@
+            <div class="row">
+                <div class="col col-2 drug-name">
+                    @drug.Name
+                    @*nazwa leku*@
+                </div>
+                <div class="col col-5 drug-consumption">
+                    <p>Ilość: @drug.Amount</p>
+                    <p>
+                        Dni przyjmowania:
+                        @if (drug.Day1)
+                        {@Html.Raw("poniedziałek, ")
+                        }
+                        @if (drug.Day2)
+                        {@Html.Raw("wtorek, ")
+                        }
+                        @if (drug.Day3)
+                        {@Html.Raw("środa, ")
+                        }
+                        @if (drug.Day4)
+                        {@Html.Raw("czwartek, ")
+                        }
+                        @if (drug.Day5)
+                        {@Html.Raw("piątek, ")
+                        }
+                        @if (drug.Day6)
+                        {@Html.Raw("sobota, ")
+                        }
+                        @if (drug.Day7)
+                        {@Html.Raw("niedziela")
+                        }
+                    </p>
+                    @*dawkowanie*@
+                </div>
+                <div class="col col-5 drug-description">
+                    @drug.ConsumptionMethod
+                </div>
+            </div>
+        </div>
+        <div class="col col-2">
+            @*data-toggle="modal" data-target="#modalUpdateDrug"*@
+            <button onclick="updateModal('@drug.ApplicationUser', '@drug.Amount', '@drug.ConsumptionMethod', '@drug.Name', @drug.Day1.ToString().ToLower(), @drug.Day2.ToString().ToLower(), @drug.Day3.ToString().ToLower(), @drug.Day4.ToString().ToLower(), @drug.Day5.ToString().ToLower(), @drug.Day6.ToString().ToLower(), @drug.Day7.ToString().ToLower(), @drug.Id);" class="btn btn-lg btn-primary" style="margin-left: 1%; margin-right: 1%; background: #daa520; border-width: 0px;">Edytuj</button>
+            <button type="button" onclick="deleteMeasurement(@drug.Id)" class="btn btn-lg btn-primary" style="margin-left: 1%; margin-right: 1%; background: #8b0000; border-width: 0px;">Usuń</button>
+        </div>
+    }
+</div>
+@*modal box add drug start*@
+<div class="modal" id="modalAddDrug" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"><b>Dodaj zażywany lek</b></h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="input-drugName">Nazwa leku:</label>
+                        <input id="input-drugName" type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="input-drugAmount">Ilość przyjmowanego leku:</label>
+                        <input id="input-drugAmount" type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="input-drugConsumptionMethod">Opis:</label>
+                        <input id="input-drugConsumptionMethod" type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Dni, w które lek ma być przyjmowany:</label>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col col-6">
+                            <input id="input-drugDay1" type="checkbox" />
+                            <label for="input-drugDay1">Poniedziałek</label>
+                        </div>
+                        <div class="col col-6">
+                            <input id="input-drugDay2" type="checkbox" />
+                            <label for="input-drugDay2" style="text-align: right">Wtorek</label>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col col-6">
+                            <input id="input-drugDay3" type="checkbox">
+                            <label for="input-drugDay3">Środa</label>
+                        </div>
+                        <div class="col col-6">
+                            <input id="input-drugDay4" type="checkbox">
+                            <label for="input-drugDay4">Czwartek</label>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col col-6">
+                            <input id="input-drugDay5" type="checkbox">
+                            <label for="input-drugDay5">Piątek</label>
+                        </div>
+                        <div class="col col-6">
+                            <input id="input-drugDay6" type="checkbox">
+                            <label for="input-drugDay6">Sobota</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <input id="input-drugDay7" type="checkbox">
+                        <label for="input-drugDay7">Niedziela</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
+                <button id="submit-button-clicked" type="submit" data-dismiss="modal" class="btn btn-primary">Wyślij wiadomość</button>
+            </div>
+        </div>
+    </div>
+</div>
+@* Modal box add drug ends *@
+
+@*modal box drug update start*@
+<div class="modal" id="modalUpdateDrug" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div id="applicationUser" style="visibility: hidden"></div>
+    <div id="drugid" style="visibility: hidden"></div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"><b>Aktualizuj zażywany lek</b></h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="input-drugNameUpdate">Nazwa leku:</label>
+                        <input id="input-drugNameUpdate" type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="input-drugAmountUpdate">Ilość przyjmowanego leku:</label>
+                        <input id="input-drugAmountUpdate" type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="input-drugConsumptionMethodUpdate">Opis:</label>
+                        <input id="input-drugConsumptionMethodUpdate" type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Dni, w które lek ma być przyjmowany:</label>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col col-6">
+                            <input id="input-drugDay1Update" type="checkbox" />
+                            <label for="input-drugDay1Update">Poniedziałek</label>
+                        </div>
+                        <div class="col col-6">
+                            <input id="input-drugDay2Update" type="checkbox" />
+                            <label for="input-drugDay2Update" style="text-align: right">Wtorek</label>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col col-6">
+                            <input id="input-drugDay3Update" type="checkbox">
+                            <label for="input-drugDay3Update">Środa</label>
+                        </div>
+                        <div class="col col-6">
+                            <input id="input-drugDay4Update" type="checkbox">
+                            <label for="input-drugDay4Update">Czwartek</label>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col col-6">
+                            <input id="input-drugDay5Update" type="checkbox">
+                            <label for="input-drugDay5Update">Piątek</label>
+                        </div>
+                        <div class="col col-6">
+                            <input id="input-drugDay6Update" type="checkbox">
+                            <label for="input-drugDay6Update">Sobota</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <input id="input-drugDay7Update" type="checkbox">
+                        <label for="input-drugDay7Update">Niedziela</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
+                <button id="update-button-clicked" type="submit" data-dismiss="modal" class="btn btn-primary">Wyślij wiadomość</button>
+            </div>
+        </div>
+    </div>
+</div>
+@* Modal box drug update ends *@
+
+
+<link rel="stylesheet" href="~/css/drug.css" />
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#submit-button-clicked").click(function () {
+            $.ajax({
+                url: '/api/Drugs',
+                type: 'POST',
+                dataType: "application/json",
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    Name: document.getElementById("input-drugName").value,
+                    Amount: document.getElementById("input-drugAmount").value,
+                    ConsumptionMethod: document.getElementById("input-drugConsumptionMethod").value,
+                    Day1: document.getElementById("input-drugDay1").checked,
+                    Day2: document.getElementById("input-drugDay2").checked,
+                    Day3: document.getElementById("input-drugDay3").checked,
+                    Day4: document.getElementById("input-drugDay4").checked,
+                    Day5: document.getElementById("input-drugDay5").checked,
+                    Day6: document.getElementById("input-drugDay6").checked,
+                    Day7: document.getElementById("input-drugDay7").checked
+                }),
+                complete: function () {
+                    location.reload();
+                }
+            });
+        });
+    });
+
+    function deleteMeasurement(id) {
+        $.ajax({
+            url: '/api/Drugs/' + id,
+            type: 'DELETE',
+            complete: function () {
+                location.reload();
+            }
+        });
+    }
+    function updateModal(applicationUser, amount, consumptionMethod, name, day1, day2, day3, day4, day5, day6, day7, id) {
+        document.getElementById("drugid").value = id;
+        document.getElementById("applicationUser").value = applicationUser;
+        document.getElementById("input-drugAmountUpdate").value = amount;
+        document.getElementById("input-drugNameUpdate").value = name;
+        document.getElementById("input-drugConsumptionMethodUpdate").value = consumptionMethod;
+        document.getElementById("input-drugDay1Update").checked = day1;
+        document.getElementById("input-drugDay2Update").checked = day2;
+        document.getElementById("input-drugDay3Update").checked = day3;
+        document.getElementById("input-drugDay4Update").checked = day4;
+        document.getElementById("input-drugDay5Update").checked = day5;
+        document.getElementById("input-drugDay6Update").checked = day6;
+        document.getElementById("input-drugDay7Update").checked = day7;
+
+        $("#modalUpdateDrug").modal();
+
+    }
+
+    $(document).ready(function () {
+        $("#update-button-clicked").click(function () {
+            $.ajax({
+                url: '/api/Drugs/' + document.getElementById("drugid").value,
+                type: 'PUT',
+                dataType: "application/json",
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    Name: document.getElementById("input-drugNameUpdate").value,
+                    Amount: document.getElementById("input-drugAmountUpdate").value,
+                    ConsumptionMethod: document.getElementById("input-drugConsumptionMethodUpdate").value,
+                    Day1: document.getElementById("input-drugDay1Update").checked,
+                    Day2: document.getElementById("input-drugDay2Update").checked,
+                    Day3: document.getElementById("input-drugDay3Update").checked,
+                    Day4: document.getElementById("input-drugDay4Update").checked,
+                    Day5: document.getElementById("input-drugDay5Update").checked,
+                    Day6: document.getElementById("input-drugDay6Update").checked,
+                    Day7: document.getElementById("input-drugDay7Update").checked
+                }),
+                complete: function () {
+                    location.reload();
+                }
+            });
+        });
+    });
+</script>

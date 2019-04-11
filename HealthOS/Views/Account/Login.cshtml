@@ -1,0 +1,56 @@
+﻿@model LoginViewModel
+@inject SignInManager<ApplicationUser> SignInManager
+
+@{
+    ViewData["Title"] = "Log in";
+}
+<div class="container" align="center">
+    <div id="loginbox" style="margin-top:50px; max-width: 400px;" class="mainbox" >
+        <div class="panel panel-info" align="left">
+            <div class="panel-heading">
+                <div class="panel-title">Zaloguj się</div>
+                <a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]" style="float:right; font-size: 85%; position: relative; top:-20px">Zarejestruj się</a>
+            </div>
+            <div style="padding-top:30px" class="panel-body">
+                <div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
+
+                <section>
+                    <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="Email"></label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Password"></label>
+                            <input asp-for="Password" class="form-control" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label asp-for="RememberMe">
+                                    <input asp-for="RememberMe" />
+                                    @Html.DisplayNameFor(m => m.RememberMe)
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-default">Zaloguj</button>
+                        </div>
+                        <div class="form-group">
+                            <p>
+                                <a asp-action="ForgotPassword">Zapomniałem hasła</a>
+                            </p>
+                        </div>
+                    </form>
+                </section>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

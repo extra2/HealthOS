@@ -1,0 +1,61 @@
+﻿@model HealthOS.ViewModels.MyPatientsViewModel
+
+@{
+    ViewBag.Title = "Moi pacjenci";
+    Layout = "_Layout";
+}
+
+<div class="row">
+    @* table (at left) *@
+    <div class="col-lg-3"></div>
+    <div class="col-lg-6">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Imię</th>
+                    <th scope="col">Nazwisko</th>
+                    <th scope="col">Usuń</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ int counter = 1;}
+                @foreach (var user in @Model.ApplicationUsers)
+                {
+                    <tr>
+                        <th scope="row">@counter</th>
+                        <td>
+                            <a asp-controller="Doctor" asp-action="MyPatient" asp-route-id="@user.Id">
+                                @user.Name
+                            </a>
+                        </td>
+                        <td>
+                            <a asp-controller="Doctor" asp-action="MyPatient" asp-route-id="@user.Id">
+                                @user.Surname
+                            </a>
+                        </td>
+                        <td>
+                            <button id="@user.Id" type="button" onclick="deleteRelation(@user.Id)" class="btn btn-sm btn-primary" style="margin-left: 1%; margin-right: 1%; background: #BA211B; border-width: 0px">Usuń</button>
+                        </td>
+                    </tr>
+                    counter++;
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-lg-3"></div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    // delete relation
+    function deleteRelation(id) {
+        $.ajax({
+            url: '/api/Relations/' + id,
+            type: 'DELETE',
+            complete: function () {
+                location.reload();
+            }
+        });
+    }
+</script>

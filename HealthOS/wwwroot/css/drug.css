@@ -1,0 +1,75 @@
+﻿.drugs-title {
+    background: #103A75;
+    color: #ffffff;
+    height: 30px;
+    font-size: 20px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 30px;
+    width: 100%;
+}
+
+.drug-name {
+    background: #103A75;
+    color: #ffffff;
+    height: 60px;
+    font-size: 20px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 60px;
+    overflow: scroll;
+    scrollbar-arrow-color: #103a75;
+    word-wrap: break-word;
+    overflow-x: hidden;
+    width: 100%;
+}
+
+.drug-break {
+    height: 1px;
+    background: lightblue;
+}
+
+.drug-consumption {
+    background: #1D6CC1;
+    color: #ffffff;
+    height: 60px;
+    font-size: 15px;
+    overflow: scroll;
+    scrollbar-arrow-color: #103a75;
+    word-wrap: break-word;
+    overflow-x: hidden;
+    width: 100%;
+}
+
+.drug-description {
+    background: #90BAF4;
+    color: #ffffff;
+    height: 60px;
+    font-size: 15px;
+    vertical-align: middle;
+    overflow: scroll;
+    scrollbar-arrow-color: #103a75;
+    word-wrap: break-word;
+    overflow-x: hidden;
+    max-width: 100%;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 4px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #00bfff;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #1d6cc1;
+}
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #1d6cc1;
+    }

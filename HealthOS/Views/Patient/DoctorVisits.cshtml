@@ -1,0 +1,278 @@
+﻿@model HealthOS.ViewModels.NextDoctorVisitViewModel
+
+@{
+    ViewBag.Title = "Wizyty";
+    Layout = "_Layout";
+}
+
+<div class="break"></div>
+
+<div class="row">
+    <div class="col col-12" align="center">
+        <button id="add-visit-button" data-toggle="modal" data-target="#modalAddVisit" class="btn btn-lg btn-primary" style="margin-left: 1%; margin-right: 1%; background: #103A75; border-width: 0px; max-width: 200px">Dodaj wizytę</button>
+    </div>
+</div>
+<div class="break"></div>
+
+<div class="row">
+    <div class="col col-3 visit-topbar">
+        Imię lekarza
+    </div>
+    <div class="col col-3 visit-topbar">
+        Lokalizacja i data wizyty
+    </div>
+    <div class="col col-4 visit-topbar">
+        Opis wizyty
+    </div>
+    <div class="col col-2 visit-topbar">
+        Opcje
+    </div>
+</div>
+<div calss="row" style="height: 1px;"></div>
+
+@foreach (var visit in @Model.NextDoctorVisits)
+{
+    <div class="row">
+        <div class="col col-3 visit-name">
+            @visit.DoctorName
+        </div>
+        <div class="col col-3 visit-location">
+            <p>Lokacja: @visit.Location</p>
+            <p>Data: @visit.VisitTime.ToString("g")</p>
+        </div>
+        <div class="col col-4 visit-description">
+            @visit.Description
+        </div>
+        <div class="col col-2 visit-settings">
+            <button onclick="updateModal(@visit.Id, '@visit.Location','@visit.DoctorName', '@visit.Description', '@visit.VisitTime.ToString("s")');" class="btn btn-lg btn-primary" style="margin-left: 1%; margin-right: 1%; background: #daa520; border-width: 0px;">Edytuj</button>
+            <button id="@visit.Id" type="button" onclick="deleteVisit(@visit.Id)" class="btn btn-lg btn-primary" style="margin-left: 1%; margin-right: 1%; background: #BA211B; border-width: 0px">Usuń</button>
+        </div>
+    </div>
+    <div class="break"></div>
+}
+
+@*modal box add visit start*@
+<div class="modal" id="modalAddVisit" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"><b>Dodaj nową wizytę</b></h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="input-doctorName">Imię lekarza:</label>
+                        <input id="input-doctorName" type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="input-location">Lokalizacja:</label>
+                        <input id="input-location" type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="input-description">Opis:</label>
+                        <input id="input-description" type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="input-date">Data wizyty:</label>
+                        <input id="input-date" type="datetime-local" value="@DateTime.Now.ToString("s")" class="form-control">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
+                <button id="add-visit-button-clicked" type="submit" data-dismiss="modal" class="btn btn-primary">Wyślij wiadomość</button>
+            </div>
+        </div>
+    </div>
+</div>
+@* Modal box add visit ends *@
+
+@*modal box update visit start*@
+<div class="modal" id="modalUpdateVisit" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div id="visitId"></div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"><b>Zaktualizuj parametry wizyty</b></h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="input-doctorNameUpdate">Imię lekarza:</label>
+                        <input id="input-doctorNameUpdate" type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="input-locationUpdate">Lokalizacja:</label>
+                        <input id="input-locationUpdate" type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="input-descriptionUpdate">Opis:</label>
+                        <input id="input-descriptionUpdate" type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="input-dateUpdate">Data wizyty:</label>
+                        <input id="input-dateUpdate" type="datetime-local"  class="form-control">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
+                <button id="update-visit-button-clicked" type="submit" data-dismiss="modal" class="btn btn-primary">Wyślij wiadomość</button>
+            </div>
+        </div>
+    </div>
+</div>
+@* Modal box update visit ends *@
+
+<style>
+    .visit-name {
+        background: #103A75;
+        color: #ffffff;
+        height: 60px;
+        font-size: 20px;
+        text-align: center;
+        vertical-align: middle;
+        line-height: 60px;
+        overflow: scroll;
+        scrollbar-arrow-color: #103a75;
+        word-wrap: break-word;
+        overflow-x: hidden;
+        width: 100%;
+    }
+
+    .visit-location {
+        background: #1D6CC1;
+        color: #ffffff;
+        height: 60px;
+        font-size: 15px;
+        overflow: scroll;
+        scrollbar-arrow-color: #103a75;
+        word-wrap: break-word;
+        overflow-x: hidden;
+        width: 100%;
+    }
+
+    .visit-description {
+        background: #90BAF4;
+        color: #ffffff;
+        height: 60px;
+        font-size: 15px;
+        overflow: scroll;
+        scrollbar-arrow-color: #103a75;
+        word-wrap: break-word;
+        overflow-x: hidden;
+        width: 100%;
+    }
+
+    .visit-settings {
+        background: #ffffff;
+        color: #ffffff;
+        height: 60px;
+        font-size: 20px;
+        text-align: center;
+        vertical-align: middle;
+        line-height: 60px;
+        width: 100%;
+    }
+
+    .visit-topbar {
+        background: #103A75;
+        color: #ffffff;
+        height: 30px;
+        font-size: 20px;
+        text-align: center;
+        vertical-align: middle;
+        line-height: 30px;
+        width: 100%;
+    }
+    /* width */
+    ::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: #00bfff;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #1d6cc1;
+    }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: #1d6cc1;
+        }
+</style>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script>
+    // add visit
+    $(document).ready(function () {
+        $("#add-visit-button-clicked").click(function () {
+            $.ajax({
+                url: '/api/Visit',
+                type: 'POST',
+                dataType: "application/json",
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    Location: document.getElementById("input-location").value,
+                    DoctorName: document.getElementById("input-doctorName").value,
+                    VisitTime: document.getElementById("input-date").value,
+                    Description: document.getElementById("input-description").value
+                }),
+                complete: function () {
+                    location.reload();
+                }
+            });
+        });
+    });
+
+    // update visit
+    $(document).ready(function () {
+        $("#update-visit-button-clicked").click(function () {
+            $.ajax({
+                url: '/api/Visit/' + document.getElementById("visitId").value,
+                type: 'PUT',
+                dataType: "application/json",
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    Location: document.getElementById("input-locationUpdate").value,
+                    DoctorName: document.getElementById("input-doctorNameUpdate").value,
+                    VisitTime: document.getElementById("input-dateUpdate").value,
+                    Description: document.getElementById("input-descriptionUpdate").value
+                }),
+                complete: function () {
+                    location.reload();
+                }
+            });
+        });
+    });
+
+    // delete visit
+    function deleteVisit(id) {
+        $.ajax({
+            url: '/api/Visit/' + id,
+            type: 'DELETE',
+            complete: function () {
+                location.reload();
+            }
+        });
+    }
+
+    function updateModal(id, location, doctorname, description, date) {
+        document.getElementById("visitId").value = id;
+        document.getElementById("input-doctorNameUpdate").value = doctorname;
+        document.getElementById("input-locationUpdate").value = location;
+        document.getElementById("input-descriptionUpdate").value = description;
+        document.getElementById("input-dateUpdate").value = date;
+
+        $("#modalUpdateVisit").modal();
+    }
+</script>

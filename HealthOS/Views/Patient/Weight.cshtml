@@ -1,0 +1,151 @@
+﻿@model HealthOS.Models.ViewModels.WeightStatisticsViewModel
+
+@{
+    ViewBag.Title = "Stężenie glukozy";
+    Layout = "_Layout";
+}
+
+
+<div class="container">
+    <div class="row">
+        @* bar - text *@
+        <div class="col-lg-12" align="center" style="font-size: 25px">
+            <b>
+                Statystyki masy ciała @if (@Model.WeightStatistics.Any())
+                {@Html.Raw(" - ")@Model.MonthName@Html.Raw(" ")@Model.WeightStatistics[0].MeasurementDate.Year}
+            </b>
+        </div>
+    </div>
+    <div class="break"></div>
+    <div class="row">
+        @* bar - buttony *@
+        <div class="col-lg-12" align="center">
+            <button type="button" onclick="location.href = '@Url.Action("Weight", "Patient", new { page = (@Model.PageNumber - 1) })'" class="btn btn-lg btn-primary" style="margin-left: 1%; margin-right: 1%; background: #103A75; border-width: 0px">Poprzedni miesiąc</button>
+            <button type="button" onclick="location.href = '@Url.Action("Weight", "Patient", new { page = (@Model.PageNumber + 1) })'" class="btn btn-lg btn-primary" style="margin-left: 1%; margin-right: 1%; background: #103A75; border-width: 0px">Następny miesiąc</button>
+            <button id="add-measurement-button" data-toggle="modal" data-target="#modalAddWeightMeasurement" class="btn btn-lg btn-primary" style="margin-left: 1%; margin-right: 1%; background: #103A75; border-width: 0px">Dodaj pomiar</button>
+        </div>
+    </div>
+    <div class="break"></div>
+    <div class="row">
+        @* table (at left) *@
+        <div class="col-lg-6">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Data pomiaru</th>
+                        <th scope="col">Masa ciała</th>
+                        <th scope="col">Usuń</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ int counter = 1;}
+                    @foreach (var stat in @Model.WeightStatistics)
+                    {
+                        <tr>
+                            <th scope="row">@counter</th>
+                            <td>@stat.MeasurementDate.ToString("g")</td>
+                            <td>@stat.Weight</td>
+                            <td>
+                                <button id="@stat.Id" type="button" onclick="deleteMeasurement(@stat.Id)" class="btn btn-sm btn-primary" style="margin-left: 1%; margin-right: 1%; background: #BA211B; border-width: 0px">Usuń</button>
+                            </td>
+                        </tr>
+                        counter++;
+                    }
+                </tbody>
+            </table>
+        </div>
+        @* chart (at right) *@
+        <div class="col-lg-6">
+            @*Google chart*@
+            @if (@Model.WeightStatistics.Any())
+            {
+                @Html.Raw("<div id=\"chart_div\" style=\"height: auto; min - height: 300px; min - width: 700px\"></div>")
+            }
+            @*Google chart*@
+        </div>
+    </div>
+</div>
+
+
+@*modal box start*@
+<div class="modal" id="modalAddWeightMeasurement" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalLabel"><b>Dodaj nowy pomiar wzrostu</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="input-weight">Masa ciała:</label>
+                        <input id="input-weight" type="number" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="input-datetime">Data wykonania pomiaru:</label>
+                        <input id="input-datetime" type="datetime-local" value="@DateTime.Now.ToString("s").Substring(0, DateTime.Now.ToString("s").LastIndexOf(':'))" class="form-control">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
+                <button id="submit-button-clicked" type="submit" data-dismiss="modal" class="btn btn-primary">Wyślij wiadomość</button>
+            </div>
+        </div>
+    </div>
+</div>
+@* Modal box ends *@
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script>
+    // send post to add measurement
+    $(document).ready(function () {
+        $("#submit-button-clicked").click(function () {
+            $.ajax({
+                url: '/api/Weight',
+                type: 'POST',
+                dataType: "application/json",
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    Weight: document.getElementById("input-weight").value,
+                    MeasurementDate: document.getElementById("input-datetime").value
+                }),
+                complete: function () {
+                    location.reload();
+                }
+            });
+        });
+    });
+    // delete measurement
+    function deleteMeasurement(id) {
+        $.ajax({
+            url: '/api/Weight/' + id,
+            type: 'DELETE',
+            complete: function () {
+                location.reload();
+            }
+        });
+        }
+    //google chart:
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+            ['Dzień', 'Masa ciała'],
+        @Html.Raw(Model.ChartDataPoints)
+        ]);
+
+    var options = {
+        title: 'Masa ciała [kg]',
+        hAxis: {title: 'Data pomiaru',  titleTextStyle: {color: '#333'}},
+        vAxis: {minValue: 0}
+    };
+
+    var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+    chart.draw(data, options);
+    }
+
+</script>

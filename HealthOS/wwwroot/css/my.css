@@ -1,0 +1,47 @@
+﻿.bg-1 {
+    background-color: #1e90ff; /* Green */
+    color: #ffffff;
+    border-radius: 10px;
+}
+
+.main-bg {
+    background-color: #ffffff;
+}
+
+.fa-big {
+    font-size: 132px;
+}
+
+.text-createaccount {
+    font-size: 30px;
+}
+
+.card-deck {
+    display: flex;
+    flex-direction: column;
+}
+
+.column {
+    float: left;
+    width: 48%;
+    margin-left: 1%;
+    margin-right: 1%;
+}
+.break {
+    height: 10px;
+}
+.panel-body {
+    padding: 15px;
+}
+
+.singlecolumn {
+    float: left;
+    width: 100%;
+    margin-left: 1%;
+    margin-right: 1%;
+}
+
+.statistics-text-style {
+    font-size: 200px;
+    align-content: center;
+}
