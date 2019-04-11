@@ -1,2 +1,2 @@
 # HealthOS
-Aplikacja webowa do wspomagania osoby chorej, przeniesiona z Azure DevOps
+Aplikacja webowa do wspomagania osoby chorej, projekt przeniesiony z Azure DevOps.
